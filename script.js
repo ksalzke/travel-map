@@ -13,13 +13,58 @@ function initMap() {
 }
 
 $(document).ready(function() {
-  const api =
+  // city information for use later
+  let city = "Prague";
+
+  // ADD ACCOMMODATION MARKER TO MAP
+  const accommodationApi =
     "https://api.airtable.com/v0/" +
     airtableBaseId +
-    "/Activities?filterByFormula=City%3D%22Prague%22&api_key=" +
+    "/Accommodation?filterByFormula=City%3D%22" +
+    city +
+    "%22&api_key=" +
     airtableApiKey;
 
-  fetch(api)
+  fetch(accommodationApi)
+    .then(res => res.json())
+    .then(data => {
+      for (let i = 0; i < Object.keys(data.records).length; i++) {
+        // iterate through matched place records
+
+        let currentPlaceInfo = data.records[i].fields;
+
+        // add place marker and info window information
+        var marker = new google.maps.Marker({
+          map: map,
+          place: {
+            placeId: currentPlaceInfo.PlaceID,
+            location: JSON.parse(currentPlaceInfo.Coordinates)
+          },
+          title: currentPlaceInfo.Name,
+          icon: {
+            url: "http://maps.google.com/mapfiles/ms/icons/blue-dot.png"
+          },
+          infowindow: new google.maps.InfoWindow({
+            content: "<strong>" + currentPlaceInfo.Name + "</strong>",
+            maxWidth: 200
+          })
+        });
+        marker.addListener("click", function() {
+          return this.infowindow.open(map, this);
+        });
+      }
+    });
+
+  // ADD ACTIVITIES MARKERS TO MAP
+  const activitiesApi =
+    "https://api.airtable.com/v0/" +
+    airtableBaseId +
+    "/Activities?filterByFormula=City%3D%22" +
+    city +
+    "%22&api_key=" +
+    airtableApiKey;
+
+  fetch(activitiesApi)
     .then(res => res.json())
     .then(data => {
       for (let i = 0; i < Object.keys(data.records).length; i++) {
@@ -48,8 +93,6 @@ $(document).ready(function() {
           typeof currentPlaceInfo["Website"] !== "undefined"
             ? "<br /><a href='" + currentPlaceInfo["Website"] + "'>Website</a>"
             : "";
-
-        console.log(rating);
 
         // add place marker and info window information
         var marker = new google.maps.Marker({
