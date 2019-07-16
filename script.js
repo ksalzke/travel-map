@@ -38,7 +38,7 @@ $(document).ready(function() {
             : "";
         let rating =
           typeof currentPlaceInfo["Rating"] !== "undefined"
-            ? currentPlaceInfo["Rating"]
+            ? currentPlaceInfo["Rating"].toString()
             : "";
         let notes =
           typeof currentPlaceInfo["Notes"] !== "undefined"
@@ -48,6 +48,8 @@ $(document).ready(function() {
           typeof currentPlaceInfo["Website"] !== "undefined"
             ? "<br /><a href='" + currentPlaceInfo["Website"] + "'>Website</a>"
             : "";
+
+        console.log(rating);
 
         // add place marker and info window information
         var marker = new google.maps.Marker({
