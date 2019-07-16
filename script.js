@@ -12,9 +12,6 @@ function initMap() {
   var infowindow = new google.maps.InfoWindow();
 }
 
-
-
-
 $(document).ready(function() {
   const api =
     "https://api.airtable.com/v0/" +
@@ -25,12 +22,34 @@ $(document).ready(function() {
   fetch(api)
     .then(res => res.json())
     .then(data => {
+      for (let i = 0; i < Object.keys(data.records).length; i++) {
+        // iterate through matched place records
 
-      for (let i = 0; i < Object.keys(data.records).length; i++) { // iterate through matched place records
-		
-		let currentPlaceInfo = data.records[i].fields;
+        let currentPlaceInfo = data.records[i].fields;
 
-		// add place marker and info window information
+        // for various fields, get blank string if empty otherwise format for info window
+        let openingHours =
+          typeof currentPlaceInfo["Opening Hours"] !== "undefined"
+            ? "<br />" + currentPlaceInfo["Opening Hours"]
+            : "";
+        let price =
+          typeof currentPlaceInfo["Price"] !== "undefined"
+            ? "<br />" + currentPlaceInfo["Price"]
+            : "";
+        let rating =
+          typeof currentPlaceInfo["Rating"] !== "undefined"
+            ? currentPlaceInfo["Rating"]
+            : "";
+        let notes =
+          typeof currentPlaceInfo["Notes"] !== "undefined"
+            ? "<br />" + currentPlaceInfo["Notes"]
+            : "";
+        let website =
+          typeof currentPlaceInfo["Website"] !== "undefined"
+            ? "<br /><a href='" + currentPlaceInfo["Website"] + "'>Website</a>"
+            : "";
+
+        // add place marker and info window information
         var marker = new google.maps.Marker({
           map: map,
           place: {
@@ -38,18 +57,22 @@ $(document).ready(function() {
             location: JSON.parse(currentPlaceInfo.Coordinates)
           },
           title: currentPlaceInfo.Name,
+          label: rating,
           infowindow: new google.maps.InfoWindow({
             content:
               "<strong>" +
               currentPlaceInfo.Name +
-              "</strong><br />" +
-              currentPlaceInfo["Opening Hours"],
+              "</strong>" +
+              openingHours +
+              price +
+              notes +
+              website,
             maxWidth: 200
           })
-		});
+        });
         marker.addListener("click", function() {
           return this.infowindow.open(map, this);
-		});
+        });
       }
     });
 });
