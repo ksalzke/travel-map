@@ -12,10 +12,7 @@ function initMap() {
   var infowindow = new google.maps.InfoWindow();
 }
 
-$(document).ready(function() {
-  // city information for use later
-  let city = "Prague";
-
+function showActivities(city) {
   // ADD ACCOMMODATION MARKER TO MAP
   const accommodationApi =
     "https://api.airtable.com/v0/" +
@@ -120,4 +117,30 @@ $(document).ready(function() {
         });
       }
     });
+}
+
+$(document).ready(function() {
+  showActivities("Prague");
+
+  $("#getactivitiesbutton").click(function() {
+    function updateCenter(place) {
+      let geocodeAPI =
+        "https://maps.googleapis.com/maps/api/geocode/json?address=" +
+        place +
+        "&key=" +
+        config.GOOGLE_MAPS_API_KEY;
+
+      fetch(geocodeAPI)
+        .then(res => res.json())
+        .then(data => {
+          let latitude = data.results[0].geometry.location.lat;
+          let longitude = data.results[0].geometry.location.lng;
+          map.panTo(new google.maps.LatLng(latitude, longitude));
+        });
+    }
+
+    city = $("#citynamesearchtext").val();
+    showActivities(city);
+    updateCenter(city);
+  });
 });
