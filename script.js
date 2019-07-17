@@ -124,5 +124,6 @@ $(document).ready(function() {
 
   $("#getactivitiesbutton").click(function() {
     city = $("#citynamesearchtext").val();
+    showActivities(city);
   });
 });
