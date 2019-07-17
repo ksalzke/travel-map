@@ -4,8 +4,16 @@
   height: 100%;
 }
 /* Optional: Makes the sample page fill the window. */
-html, body {
+html,
+body {
   height: 100%;
   margin: 0;
   padding: 0;
+}
+
+form {
+  position: absolute;
+  left: 50px;
+  bottom: 50px;
+  z-index: 10;
 }
