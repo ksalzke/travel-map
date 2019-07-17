@@ -125,6 +125,6 @@ $(document).ready(function() {
   $("#getactivitiesbutton").click(function() {
     city = $("#citynamesearchtext").val();
     showActivities(city);
-    map.setCenter(new google.maps.LatLng(48.2082, 16.3738));
+    map.panTo(new google.maps.LatLng(48.2082, 16.3738));
   });
 });
