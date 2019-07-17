@@ -122,6 +122,8 @@ $(document).ready(function() {
     });
 
   $("#getactivitiesbutton").click(function() {
-    console.log("Button clicked!");
+    console.log(city);
+    city = $("#citynamesearchtext").val();
+    console.log(city);
   });
 });
