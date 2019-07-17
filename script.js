@@ -120,4 +120,8 @@ $(document).ready(function() {
         });
       }
     });
+
+  $("#getactivitiesbutton").click(function() {
+    console.log("Button clicked!");
+  });
 });
